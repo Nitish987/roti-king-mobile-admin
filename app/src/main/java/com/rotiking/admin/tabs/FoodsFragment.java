@@ -71,6 +71,7 @@ public class FoodsFragment extends Fragment {
 
             @Override
             public void resolved(List<Food> o) {
+                foodsProgress.setVisibility(View.INVISIBLE);
                 FoodItemRecyclerAdapter adapter = new FoodItemRecyclerAdapter(o);
                 foodsRV.setAdapter(adapter);
             }

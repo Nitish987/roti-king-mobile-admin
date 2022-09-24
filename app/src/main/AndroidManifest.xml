@@ -17,6 +17,9 @@
         android:theme="@style/Theme.RotiKingAdmin"
         tools:targetApi="31">
         <activity
+            android:name=".CreateDeliveryAgentActivity"
+            android:exported="false" />
+        <activity
             android:name=".OrderDetailActivity"
             android:exported="false" />
         <activity

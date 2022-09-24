@@ -71,6 +71,7 @@ public class ToppingsFragment extends Fragment {
 
             @Override
             public void resolved(List<Topping> o) {
+                toppingsProgress.setVisibility(View.INVISIBLE);
                 ToppingItemRecyclerAdapter adapter = new ToppingItemRecyclerAdapter(o);
                 toppingsRV.setAdapter(adapter);
             }

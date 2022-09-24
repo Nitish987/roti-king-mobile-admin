@@ -65,6 +65,12 @@
     <string name="accept_order">Accept Order</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="order_name">Order Name</string>
+    <string name="delivery_agents">Delivery agents</string>
+    <string name="add_delivery_agent_user">Add Delivery Agent User</string>
+    <string name="agent_name">Agent Name</string>
+    <string name="agent_phone">Agent Phone</string>
+    <string name="agent_email">Agent Email</string>
+    <string name="agent">Agent</string>
     <string-array name="food_type_entries">
         <item>breakfast</item>
         <item>lunch</item>
