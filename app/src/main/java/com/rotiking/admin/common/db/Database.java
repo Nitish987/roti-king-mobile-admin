@@ -120,7 +120,7 @@ public class Database {
             return;
         }
 
-        Server.request(context, Request.Method.PUT, ApiKey.REQUEST_API_URL + "edit-food/" + foodId + "/", headers, food, new Promise<JSONObject>() {
+        Server.request(context, Request.Method.PUT, ApiKey.REQUEST_API_URL + "admin/edit-food/" + foodId + "/", headers, food, new Promise<JSONObject>() {
                     @Override
                     public void resolving(int progress, String msg) {
                         promise.resolving(progress, msg);
