@@ -19,6 +19,7 @@ import com.rotiking.admin.adapter.CheckoutCartItemRecyclerAdapter;
 import com.rotiking.admin.models.CartItem;
 import com.rotiking.admin.models.CheckoutCartItem;
 import com.rotiking.admin.models.Order;
+import com.rotiking.admin.models.Topping;
 import com.rotiking.admin.utils.DateParser;
 
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         dispatchedState = findViewById(R.id.dispatched_state);
         onWayState = findViewById(R.id.on_way_state);
         deliveredState = findViewById(R.id.delivered_state);
+        acceptOrderBtn = findViewById(R.id.accept);
 
         orderItemRV = findViewById(R.id.ordered_item_rv);
         orderItemRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -188,11 +190,16 @@ public class OrderDetailActivity extends AppCompatActivity {
     private List<CheckoutCartItem> createOrderItemList(List<CartItem> items) {
         List<CheckoutCartItem> checkoutCartItems = new ArrayList<>();
         for (CartItem cartItem : items) {
-            String orderName = cartItem.getFood_data().getName();
+            StringBuilder orderName = new StringBuilder();
+            orderName.append(cartItem.getFood_data().getName()).append("(").append(cartItem.getQuantity()).append(")");
             if (!cartItem.getTopping_ids().equals("None")) {
-                orderName = orderName + " + Toppings";
+                orderName.append(" + Toppings(");
+                for (Topping topping: cartItem.getToppings()) {
+                    orderName.append(topping.getName()).append(", ");
+                }
+                orderName.replace(orderName.length() - 2, orderName.length(), ")");
             }
-            CheckoutCartItem item = new CheckoutCartItem(orderName, cartItem.getTotal_price());
+            CheckoutCartItem item = new CheckoutCartItem(orderName.toString(), cartItem.getTotal_price());
             checkoutCartItems.add(item);
         }
         return checkoutCartItems;
