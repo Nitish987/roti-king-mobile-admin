@@ -73,7 +73,7 @@ public class DispatcherFragment extends Fragment {
             @Override
             public void resolved(List<Agent> o) {
                 agentsProgress.setVisibility(View.INVISIBLE);
-                AgentRecyclerAdapter adapter = new AgentRecyclerAdapter(o);
+                AgentRecyclerAdapter adapter = new AgentRecyclerAdapter(o, false);
                 agentsRV.setAdapter(adapter);
             }
 

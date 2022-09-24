@@ -15,13 +15,17 @@ import com.rotiking.admin.CreateDeliveryAgentActivity;
 import com.rotiking.admin.R;
 import com.rotiking.admin.models.Agent;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdapter.AgentHolder> {
     private final List<Agent> agents;
+    private boolean isForSelection;
 
-    public AgentRecyclerAdapter(List<Agent> agents) {
+    public AgentRecyclerAdapter(List<Agent> agents, boolean isForSelection) {
         this.agents = agents;
+        this.isForSelection = isForSelection;
     }
 
     @NonNull
@@ -38,10 +42,16 @@ public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdap
         holder.setPhone(agent.getPhone());
 
         holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), CreateDeliveryAgentActivity.class);
-            intent.putExtra("AGENT", agent);
-            intent.putExtra("NEW", false);
-            view.getContext().startActivity(intent);
+            if (isForSelection) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("agentName", agent.getName());
+                map.put("agentPhone", agent.getPhone());
+            } else {
+                Intent intent = new Intent(view.getContext(), CreateDeliveryAgentActivity.class);
+                intent.putExtra("AGENT", agent);
+                intent.putExtra("NEW", false);
+                view.getContext().startActivity(intent);
+            }
         });
     }
 

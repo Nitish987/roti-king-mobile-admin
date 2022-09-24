@@ -71,6 +71,7 @@
     <string name="agent_phone">Agent Phone</string>
     <string name="agent_email">Agent Email</string>
     <string name="agent">Agent</string>
+    <string name="select_a_delivery_agent">Select a delivery agent</string>
     <string-array name="food_type_entries">
         <item>breakfast</item>
         <item>lunch</item>

@@ -30,6 +30,7 @@
             android:background="@color/transparent"
             android:contentDescription="@string/close"
             android:src="@drawable/ic_baseline_close_24" />
+
     </RelativeLayout>
 
     <TextView

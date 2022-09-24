@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -162,6 +163,12 @@ public class OrderDetailActivity extends AppCompatActivity {
                     deliveryAgentDesk.setVisibility(View.GONE);
                 }
             }
+        });
+
+        deliveryAgentDesk.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SelectDeliveryAgentActivity.class);
+
+            startActivity(intent);
         });
 
         acceptOrderBtn.setOnClickListener(view -> {
