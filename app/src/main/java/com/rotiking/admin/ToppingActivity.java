@@ -21,21 +21,21 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.rotiking.admin.common.db.Database;
-import com.rotiking.admin.models.Food;
+import com.rotiking.admin.models.Topping;
 import com.rotiking.admin.utils.Promise;
 import com.rotiking.admin.utils.Validator;
 
-public class FoodActivity extends AppCompatActivity {
+public class ToppingActivity extends AppCompatActivity {
     private ImageView photo;
-    private EditText foodName, description, includes, ingredients, price, discount;
-    private Spinner foodType, available;
+    private EditText toppingName, includes, price;
+    private Spinner available;
     private AppCompatButton save;
     private CircularProgressIndicator saveProgress;
     private ImageButton delete, close;
 
     private StorageReference reference;
 
-    private Food food;
+    private Topping topping;
     private boolean NEW;
     private String photoUrl = null;
     private boolean isPhotoPicked = false;
@@ -43,21 +43,17 @@ public class FoodActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_food);
+        setContentView(R.layout.activity_topping);
 
-        food = (Food) getIntent().getSerializableExtra("FOOD");
+        topping = (Topping) getIntent().getSerializableExtra("TOPPING");
         NEW = getIntent().getBooleanExtra("NEW", false);
 
-        reference = FirebaseStorage.getInstance().getReference("foods");
+        reference = FirebaseStorage.getInstance().getReference("toppings");
 
         photo = findViewById(R.id.photo);
-        foodName = findViewById(R.id.food_name);
-        description = findViewById(R.id.description);
+        toppingName = findViewById(R.id.topping_name);
         includes = findViewById(R.id.food_includes);
-        ingredients = findViewById(R.id.ingredients);
         price = findViewById(R.id.price);
-        discount = findViewById(R.id.discount);
-        foodType = findViewById(R.id.food_type);
         available = findViewById(R.id.available);
         save = findViewById(R.id.save_btn);
         saveProgress = findViewById(R.id.save_progress);
@@ -70,37 +66,21 @@ public class FoodActivity extends AppCompatActivity {
         super.onStart();
         if (NEW) delete.setVisibility(View.GONE);
 
-        photoUrl = food.getPhoto();
+        photoUrl = topping.getPhoto();
 
-        Glide.with(this).load(food.getPhoto()).into(photo);
-        foodName.setText(food.getName());
-        description.setText(food.getDescription());
-        includes.setText(food.getFood_includes());
-        ingredients.setText(food.getIngredients());
+        Glide.with(this).load(topping.getPhoto()).into(photo);
+        toppingName.setText(topping.getName());
+        includes.setText(topping.getFood_includes());
 
-        switch (food.getFood_type()) {
-            case "breakfast": foodType.setSelection(0); break;
-            case "lunch": foodType.setSelection(1); break;
-            case "dinner": foodType.setSelection(2); break;
-        }
-
-        if (food.isAvailable()) available.setSelection(0);
+        if (topping.isAvailable()) available.setSelection(0);
         else available.setSelection(1);
 
-        String p_ = Integer.toString(food.getPrice());
+        String p_ = Integer.toString(topping.getPrice());
         price.setText(p_);
 
-        String d_ = Integer.toString(food.getDiscount());
-        discount.setText(d_);
-
         save.setOnClickListener(view -> {
-            if (Validator.isEmpty(foodName.getText().toString())) {
-                foodName.setError("Field Required");
-                return;
-            }
-
-            if (Validator.isEmpty(description.getText().toString())) {
-                description.setError("Field Required");
+            if (Validator.isEmpty(toppingName.getText().toString())) {
+                toppingName.setError("Field Required");
                 return;
             }
 
@@ -109,18 +89,8 @@ public class FoodActivity extends AppCompatActivity {
                 return;
             }
 
-            if (Validator.isEmpty(ingredients.getText().toString())) {
-                ingredients.setError("Field Required");
-                return;
-            }
-
             if (Validator.isEmpty(price.getText().toString())) {
                 price.setError("Field Required");
-                return;
-            }
-
-            if (Validator.isEmpty(discount.getText().toString())) {
-                discount.setError("Field Required");
                 return;
             }
 
@@ -136,7 +106,7 @@ public class FoodActivity extends AppCompatActivity {
                 storageReference.putFile(Uri.parse(photoUrl)).addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(this::addNewData)).addOnProgressListener(snapshot -> saveProgress.setVisibility(View.VISIBLE)).addOnFailureListener(e -> {
                     saveProgress.setVisibility(View.INVISIBLE);
                     save.setVisibility(View.VISIBLE);
-                    Toast.makeText(FoodActivity.this, "Unable to connect to server.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ToppingActivity.this, "Unable to connect to server.", Toast.LENGTH_SHORT).show();
                 });
             } else {
                 if (isPhotoPicked) {
@@ -144,7 +114,7 @@ public class FoodActivity extends AppCompatActivity {
                     storageReference.putFile(Uri.parse(photoUrl)).addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(this::updateOldData)).addOnProgressListener(snapshot -> saveProgress.setVisibility(View.VISIBLE)).addOnFailureListener(e -> {
                         saveProgress.setVisibility(View.INVISIBLE);
                         save.setVisibility(View.VISIBLE);
-                        Toast.makeText(FoodActivity.this, "Unable to connect to server.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ToppingActivity.this, "Unable to connect to server.", Toast.LENGTH_SHORT).show();
                     });
                 } else {
                     updateOldData(Uri.parse(photoUrl));
@@ -172,21 +142,21 @@ public class FoodActivity extends AppCompatActivity {
 
         delete.setOnClickListener(view -> {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setTitle("Delete Food");
-            alert.setMessage("Are you sure to delete this food item.");
-            alert.setPositiveButton("Yes", (dialogInterface, i) -> Database.deleteFood(this, food.getFood_id(), new Promise<String>() {
+            alert.setTitle("Delete Topping");
+            alert.setMessage("Are you sure to delete this Topping item.");
+            alert.setPositiveButton("Yes", (dialogInterface, i) -> Database.deleteTopping(this, topping.getTopping_id(), new Promise<String>() {
                 @Override
                 public void resolving(int progress, String msg) {}
 
                 @Override
                 public void resolved(String o) {
-                    Toast.makeText(FoodActivity.this, o, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ToppingActivity.this, o, Toast.LENGTH_SHORT).show();
                     finish();
                 }
 
                 @Override
                 public void reject(String err) {
-                    Toast.makeText(FoodActivity.this, err, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ToppingActivity.this, err, Toast.LENGTH_SHORT).show();
                 }
             }));
             alert.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
@@ -197,17 +167,13 @@ public class FoodActivity extends AppCompatActivity {
     }
 
     private void addNewData(Uri uri) {
-        Database.addFood(
+        Database.addTopping(
                 this,
-                foodName.getText().toString(),
+                toppingName.getText().toString(),
                 uri.toString(),
-                description.getText().toString(),
                 includes.getText().toString(),
-                ingredients.getText().toString(),
-                foodType.getSelectedItem().toString(),
                 available.getSelectedItemPosition() == 0,
                 Integer.parseInt(price.getText().toString()),
-                Integer.parseInt(discount.getText().toString()),
                 new Promise<String>() {
                     @Override
                     public void resolving(int progress, String msg) {
@@ -216,7 +182,7 @@ public class FoodActivity extends AppCompatActivity {
 
                     @Override
                     public void resolved(String o) {
-                        Toast.makeText(FoodActivity.this, o, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ToppingActivity.this, o, Toast.LENGTH_SHORT).show();
                         finish();
                     }
 
@@ -224,25 +190,21 @@ public class FoodActivity extends AppCompatActivity {
                     public void reject(String err) {
                         saveProgress.setVisibility(View.INVISIBLE);
                         save.setVisibility(View.VISIBLE);
-                        Toast.makeText(FoodActivity.this, err, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ToppingActivity.this, err, Toast.LENGTH_SHORT).show();
                     }
                 }
         );
     }
 
     private void updateOldData(Uri uri) {
-        Database.editFood(
+        Database.editTopping(
                 this,
-                food.getFood_id(),
-                foodName.getText().toString(),
+                topping.getTopping_id(),
+                toppingName.getText().toString(),
                 uri.toString(),
-                description.getText().toString(),
                 includes.getText().toString(),
-                ingredients.getText().toString(),
-                foodType.getSelectedItem().toString(),
                 available.getSelectedItemPosition() == 0,
                 Integer.parseInt(price.getText().toString()),
-                Integer.parseInt(discount.getText().toString()),
                 new Promise<String>() {
                     @Override
                     public void resolving(int progress, String msg) {
@@ -251,7 +213,7 @@ public class FoodActivity extends AppCompatActivity {
 
                     @Override
                     public void resolved(String o) {
-                        Toast.makeText(FoodActivity.this, o, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ToppingActivity.this, o, Toast.LENGTH_SHORT).show();
                         finish();
                     }
 
@@ -259,7 +221,7 @@ public class FoodActivity extends AppCompatActivity {
                     public void reject(String err) {
                         saveProgress.setVisibility(View.INVISIBLE);
                         save.setVisibility(View.VISIBLE);
-                        Toast.makeText(FoodActivity.this, err, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ToppingActivity.this, err, Toast.LENGTH_SHORT).show();
                     }
                 }
         );

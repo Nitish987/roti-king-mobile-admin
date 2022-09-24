@@ -232,7 +232,7 @@ public class Database {
                     public void resolved(JSONObject data) {
                         Gson gson = new Gson();
                         try {
-                            Topping[] toppings = gson.fromJson(data.getJSONArray("foods").toString(), Topping[].class);
+                            Topping[] toppings = gson.fromJson(data.getJSONArray("toppings").toString(), Topping[].class);
                             promise.resolved(Arrays.asList(toppings));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -266,7 +266,7 @@ public class Database {
             return;
         }
 
-        Server.request(context, Request.Method.PUT, ApiKey.REQUEST_API_URL + "edit-topping/" + toppingId + "/", headers, topping, new Promise<JSONObject>() {
+        Server.request(context, Request.Method.PUT, ApiKey.REQUEST_API_URL + "admin/edit-topping/" + toppingId + "/", headers, topping, new Promise<JSONObject>() {
                     @Override
                     public void resolving(int progress, String msg) {
                         promise.resolving(progress, msg);
