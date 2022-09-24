@@ -38,6 +38,33 @@
     <string name="topping_name">Topping Name</string>
     <string name="item_included_in_topping">Item included in Topping</string>
     <string name="discount_in_percent">Discount in percent</string>
+    <string name="order_000000">#~order~000000</string>
+    <string name="_0_items">0 Items</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="preparing">preparing...</string>
+    <string name="time">time</string>
+    <string name="no_orders_yet">No Orders Yet.</string>
+    <string name="order_detail">Order Detail</string>
+    <string name="tracking">Tracking</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="ordered">Ordered...</string>
+    <string name="total_price">Total Price</string>
+    <string name="delivery_price">Delivery Price</string>
+    <string name="total_payable">Total Payable</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="no_name">No Name</string>
+    <string name="no_address">No Address</string>
+    <string name="no_phone">No Phone</string>
+    <string name="cash">cash</string>
+    <string name="allot_delivery_agent">Allot Delivery Agent</string>
+    <string name="click_to_allot_a_delivery_agent">Click to allot a delivery agent to delivery this order.</string>
+    <string name="accept_order">Accept Order</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="order_name">Order Name</string>
     <string-array name="food_type_entries">
         <item>breakfast</item>
         <item>lunch</item>

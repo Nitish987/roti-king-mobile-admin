@@ -7,15 +7,18 @@
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_food.xml" value="0.25" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_main.xml" value="0.2359375" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_order_detail.xml" value="0.25" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_recover_password.xml" value="0.1" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_starter.xml" value="0.1" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_topping.xml" value="0.25" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_dispatcher.xml" value="0.1" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_foods.xml" value="0.1" />
-        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_orders.xml" value="0.23541666666666666" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_orders.xml" value="0.24947916666666667" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_profile.xml" value="0.1" />
-        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_toppings.xml" value="0.25" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_toppings.xml" value="0.24947916666666667" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_cart_item.xml" value="0.1814814814814815" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_food.xml" value="0.264" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_order.xml" value="0.25" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_topping.xml" value="0.25" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/menu/main_bottom_navigation.xml" value="0.1" />
       </map>
