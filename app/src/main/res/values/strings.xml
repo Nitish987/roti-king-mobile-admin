@@ -17,6 +17,24 @@
     <string name="toppings">Toppings</string>
     <string name="profile">Profile</string>
     <string name="dispatcher">Dispatcher</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_food">Add Food</string>
+    <string name="click_on_food_icon_to_add_item_photo">Click on food icon to add item photo.</string>
+    <string name="food_name">Food Name</string>
+    <string name="description">Description</string>
+    <string name="item_included_with_this_food_item">Item included with this food item</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="food_type">Food Type</string>
+    <string name="food_available">Food Available</string>
+    <string name="price">Price</string>
+    <string name="discount">Discount</string>
+    <string name="save">Save</string>
+    <string-array name="food_type_entries">
+        <item>breakfast</item>
+        <item>lunch</item>
+        <item>dinner</item>
+    </string-array>
+    <string-array name="food_available_entries">
+        <item>Available</item>
+        <item>Not available</item>
+    </string-array>
 </resources>
