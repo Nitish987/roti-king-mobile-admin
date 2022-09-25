@@ -101,7 +101,7 @@ public class OrderRecyclerAdapter extends FirestoreRecyclerAdapter<Order, OrderR
                 }
                 this.status.setTextColor(itemView.getContext().getColor(R.color.green));
             } else {
-                st = "Your order was canceled.";
+                st = "Order was canceled.";
                 this.status.setTextColor(itemView.getContext().getColor(R.color.red));
             }
             this.status.setText(st);

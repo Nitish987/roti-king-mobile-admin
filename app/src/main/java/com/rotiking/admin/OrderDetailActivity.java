@@ -145,6 +145,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                         dispatchedState.getBackground().setTint(getColor(R.color.red));
                         onWayState.getBackground().setTint(getColor(R.color.red));
 
+                        deliveryAgentDesk.setEnabled(false);
+
                         acceptOrderBtn.setVisibility(View.GONE);
                         acceptOrderBtn.setEnabled(false);
 
@@ -159,6 +161,13 @@ public class OrderDetailActivity extends AppCompatActivity {
                         onWayState.getBackground().setTint(getColor(R.color.red));
                         deliveredState.getBackground().setTint(getColor(R.color.red));
 
+                        if (order.getSecureNumber() != null) {
+                            deliveredState.getBackground().setTint(getColor(R.color.light_red));
+
+                            String notDelivered = "Not Delivered Yet";
+                            orderedStateTxt.setText(notDelivered);
+                        }
+
                         acceptOrderBtn.setVisibility(View.GONE);
                         acceptOrderBtn.setEnabled(false);
 
@@ -169,10 +178,14 @@ public class OrderDetailActivity extends AppCompatActivity {
 
                 if (!order.isOrderSuccess()) {
                     orderStateIndicator.setProgressCompat(0, true);
+                    acceptOrderBtn.setVisibility(View.GONE);
+                    acceptOrderBtn.setEnabled(false);
+
                     String cancelMsg = "Order was Canceled.";
                     cancelOrderBtn.setText(cancelMsg);
                     cancelOrderBtn.setEnabled(false);
                     orderedStateTxt.setText(cancelMsg);
+
                     deliveryAgentDesk.setVisibility(View.GONE);
                 }
             }

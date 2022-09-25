@@ -72,6 +72,11 @@
     <string name="agent_email">Agent Email</string>
     <string name="agent">Agent</string>
     <string name="select_a_delivery_agent">Select a delivery agent</string>
+    <string name="cooking">Cooking</string>
+    <string name="dispatched">Dispatched</string>
+    <string name="on_way">On Way</string>
+    <string name="delivered">Delivered</string>
+    <string name="canceled">Canceled</string>
     <string-array name="food_type_entries">
         <item>breakfast</item>
         <item>lunch</item>
