@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,9 +22,11 @@ import java.util.Map;
 
 public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdapter.AgentHolder> {
     private final List<Agent> agents;
+    private final LinearLayout noDeliveryAgentI;
 
-    public AgentRecyclerAdapter(List<Agent> agents) {
+    public AgentRecyclerAdapter(List<Agent> agents, LinearLayout noDeliveryAgentI) {
         this.agents = agents;
+        this.noDeliveryAgentI = noDeliveryAgentI;
     }
 
     @NonNull
@@ -34,6 +37,8 @@ public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdap
 
     @Override
     public void onBindViewHolder(@NonNull AgentHolder holder, int position) {
+        noDeliveryAgentI.setVisibility(View.INVISIBLE);
+
         Agent agent = agents.get(position);
         holder.setPhoto(agent.getPhoto());
         holder.setName(agent.getName());

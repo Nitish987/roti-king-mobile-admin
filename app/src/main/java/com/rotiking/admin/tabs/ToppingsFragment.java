@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,6 +29,7 @@ public class ToppingsFragment extends Fragment {
     private FloatingActionButton addToppingBtn;
     private RecyclerView toppingsRV;
     private CircularProgressIndicator toppingsProgress;
+    private LinearLayout noToppingI;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class ToppingsFragment extends Fragment {
 
         addToppingBtn = view.findViewById(R.id.add_topping_btn);
         toppingsProgress = view.findViewById(R.id.toppings_progress);
+        noToppingI = view.findViewById(R.id.no_topping_i);
 
         toppingsRV = view.findViewById(R.id.toppings_RV);
         toppingsRV.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -72,7 +75,7 @@ public class ToppingsFragment extends Fragment {
             @Override
             public void resolved(List<Topping> o) {
                 toppingsProgress.setVisibility(View.INVISIBLE);
-                ToppingItemRecyclerAdapter adapter = new ToppingItemRecyclerAdapter(o);
+                ToppingItemRecyclerAdapter adapter = new ToppingItemRecyclerAdapter(o, noToppingI);
                 toppingsRV.setAdapter(adapter);
             }
 

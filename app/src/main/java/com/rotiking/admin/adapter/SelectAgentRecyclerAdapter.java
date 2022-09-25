@@ -2,7 +2,9 @@ package com.rotiking.admin.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,11 +22,13 @@ public class SelectAgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecycl
     private final Activity activity;
     private final List<Agent> agents;
     private final  String orderId;
+    private final LinearLayout noDeliveryAgentI;
 
-    public SelectAgentRecyclerAdapter(Activity activity, List<Agent> agents, String orderId) {
+    public SelectAgentRecyclerAdapter(Activity activity, List<Agent> agents, String orderId, LinearLayout noDeliveryAgentI) {
         this.activity = activity;
         this.agents = agents;
         this.orderId = orderId;
+        this.noDeliveryAgentI = noDeliveryAgentI;
     }
 
     @NonNull
@@ -35,6 +39,8 @@ public class SelectAgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecycl
 
     @Override
     public void onBindViewHolder(@NonNull AgentRecyclerAdapter.AgentHolder holder, int position) {
+        noDeliveryAgentI.setVisibility(View.INVISIBLE);
+
         Agent agent = agents.get(position);
         holder.setPhoto(agent.getPhoto());
         holder.setName(agent.getName());

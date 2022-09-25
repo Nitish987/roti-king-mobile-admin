@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,9 +21,11 @@ import java.util.List;
 
 public class FoodItemRecyclerAdapter extends RecyclerView.Adapter<FoodItemRecyclerAdapter.FoodItemHolder> {
     private final List<Food> foods;
+    private final LinearLayout noFoodsI;
 
-    public FoodItemRecyclerAdapter(List<Food> foods) {
+    public FoodItemRecyclerAdapter(List<Food> foods, LinearLayout noFoodsI) {
         this.foods = foods;
+        this.noFoodsI = noFoodsI;
     }
 
     @NonNull
@@ -33,6 +36,8 @@ public class FoodItemRecyclerAdapter extends RecyclerView.Adapter<FoodItemRecycl
 
     @Override
     public void onBindViewHolder(@NonNull FoodItemRecyclerAdapter.FoodItemHolder holder, int position) {
+        noFoodsI.setVisibility(View.INVISIBLE);
+
         Food food = foods.get(position);
         holder.setPhoto(food.getPhoto());
         holder.setName(food.getName());

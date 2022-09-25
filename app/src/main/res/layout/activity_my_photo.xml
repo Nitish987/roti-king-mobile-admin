@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SelectDeliveryAgentActivity"
+    tools:context=".MyPhotoActivity"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -23,6 +23,17 @@
             android:contentDescription="@string/app_name"/>
 
         <ImageButton
+            android:id="@+id/edit_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="45dp"
+            android:background="@color/transparent"
+            android:contentDescription="@string/close"
+            android:src="@drawable/ic_baseline_edit_24" />
+
+        <ImageButton
             android:id="@+id/close"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -34,54 +45,38 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/select_a_delivery_agent"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:paddingHorizontal="10dp"/>
-
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/photo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:layout_above="@id/change_photo_btn_desk"
+        android:layout_below="@+id/toolbar"
+        android:src="@drawable/ic_baseline_account_box_24"
+        android:contentDescription="@string/photo"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/delivery_user_RV"
+    <RelativeLayout
+        android:id="@+id/change_photo_btn_desk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/change_photo_btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <LinearLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:id="@+id/no_delivery_i"
-            android:orientation="vertical"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:src="@drawable/delivery"
-                android:contentDescription="@string/no_delivery_agent"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/no_delivery_agent"/>
-
-        </LinearLayout>
-
+            style="@style/Button"
+            android:text="@string/save"
+            android:layout_margin="10dp"
+            android:visibility="gone"/>
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/delivery_user_progress"
+            android:id="@+id/change_photo_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:indeterminate="true"
             android:visibility="gone"/>
 
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

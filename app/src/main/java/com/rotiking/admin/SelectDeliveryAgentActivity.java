@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -21,6 +22,7 @@ public class SelectDeliveryAgentActivity extends AppCompatActivity {
     private RecyclerView agentsRV;
     private CircularProgressIndicator agentsProgress;
     private ImageButton close;
+    private LinearLayout noDeliveryAgentI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class SelectDeliveryAgentActivity extends AppCompatActivity {
 
         agentsProgress = findViewById(R.id.delivery_user_progress);
         close = findViewById(R.id.close);
+        noDeliveryAgentI = findViewById(R.id.no_delivery_i);
 
         agentsRV = findViewById(R.id.delivery_user_RV);
         agentsRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -47,7 +50,7 @@ public class SelectDeliveryAgentActivity extends AppCompatActivity {
             @Override
             public void resolved(List<Agent> o) {
                 agentsProgress.setVisibility(View.INVISIBLE);
-                SelectAgentRecyclerAdapter adapter = new SelectAgentRecyclerAdapter(SelectDeliveryAgentActivity.this, o, getIntent().getStringExtra("ORDER_ID"));
+                SelectAgentRecyclerAdapter adapter = new SelectAgentRecyclerAdapter(SelectDeliveryAgentActivity.this, o, getIntent().getStringExtra("ORDER_ID"), noDeliveryAgentI);
                 agentsRV.setAdapter(adapter);
             }
 

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,6 +29,7 @@ public class FoodsFragment extends Fragment {
     private FloatingActionButton addFoodBtn;
     private RecyclerView foodsRV;
     private CircularProgressIndicator foodsProgress;
+    private LinearLayout noFoodsI;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class FoodsFragment extends Fragment {
 
         addFoodBtn = view.findViewById(R.id.add_food_btn);
         foodsProgress = view.findViewById(R.id.foods_progress);
+        noFoodsI = view.findViewById(R.id.no_food_i);
 
         foodsRV = view.findViewById(R.id.foods_RV);
         foodsRV.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -72,7 +75,7 @@ public class FoodsFragment extends Fragment {
             @Override
             public void resolved(List<Food> o) {
                 foodsProgress.setVisibility(View.INVISIBLE);
-                FoodItemRecyclerAdapter adapter = new FoodItemRecyclerAdapter(o);
+                FoodItemRecyclerAdapter adapter = new FoodItemRecyclerAdapter(o, noFoodsI);
                 foodsRV.setAdapter(adapter);
             }
 

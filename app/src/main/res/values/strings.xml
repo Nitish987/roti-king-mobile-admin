@@ -77,6 +77,15 @@
     <string name="on_way">On Way</string>
     <string name="delivered">Delivered</string>
     <string name="canceled">Canceled</string>
+    <string name="name">Name</string>
+    <string name="username">Username</string>
+    <string name="edit_photo">Edit Photo</string>
+    <string name="logout">Logout</string>
+    <string name="photo">Photo</string>
+    <string name="shop_close">Shop Closed</string>
+    <string name="no_food_items">No Food Items.</string>
+    <string name="no_topping_items">No Topping Items</string>
+    <string name="no_delivery_agent">No Delivery Agent.</string>
     <string-array name="food_type_entries">
         <item>breakfast</item>
         <item>lunch</item>

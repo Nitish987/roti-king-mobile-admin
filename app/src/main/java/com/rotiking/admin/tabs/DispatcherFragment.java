@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,6 +29,7 @@ public class DispatcherFragment extends Fragment {
     private FloatingActionButton createDeliveryAgent;
     private RecyclerView agentsRV;
     private CircularProgressIndicator agentsProgress;
+    private LinearLayout noDeliveryAgentI;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class DispatcherFragment extends Fragment {
 
         createDeliveryAgent = view.findViewById(R.id.add_delivery_user_btn);
         agentsProgress = view.findViewById(R.id.delivery_user_progress);
+        noDeliveryAgentI = view.findViewById(R.id.no_delivery_i);
 
         agentsRV = view.findViewById(R.id.delivery_user_RV);
         agentsRV.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -73,7 +76,7 @@ public class DispatcherFragment extends Fragment {
             @Override
             public void resolved(List<Agent> o) {
                 agentsProgress.setVisibility(View.INVISIBLE);
-                AgentRecyclerAdapter adapter = new AgentRecyclerAdapter(o);
+                AgentRecyclerAdapter adapter = new AgentRecyclerAdapter(o, noDeliveryAgentI);
                 agentsRV.setAdapter(adapter);
             }
 
