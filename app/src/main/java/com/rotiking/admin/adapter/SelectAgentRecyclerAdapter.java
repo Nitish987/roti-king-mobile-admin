@@ -50,6 +50,7 @@ public class SelectAgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecycl
             Map<String, Object> map = new HashMap<>();
             map.put("agentName", agent.getName());
             map.put("agentPhone", "+91" + agent.getPhone());
+            map.put("agentUid", agent.getUid());
             FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map).addOnSuccessListener(unused -> activity.finish()).addOnFailureListener(e -> Toast.makeText(view.getContext(), "Unable to allot delivery agent.", Toast.LENGTH_SHORT).show());
         });
     }

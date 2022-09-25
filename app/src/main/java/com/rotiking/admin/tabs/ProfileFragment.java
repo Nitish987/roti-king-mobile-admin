@@ -101,7 +101,7 @@ public class ProfileFragment extends Fragment {
 
                 String o_ = "Shop Closed";
                 if (isOpen) {
-                    o_ = "Shop Oped";
+                    o_ = "Shop Open";
                 }
                 shopOpener.setText(o_);
             }
