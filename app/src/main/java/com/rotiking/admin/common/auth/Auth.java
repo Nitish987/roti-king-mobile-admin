@@ -49,6 +49,7 @@ public class Auth {
                 body.put("email", email);
                 body.put("password", password);
                 body.put("device", Build.MODEL);
+                body.put("msg_token", "None");
                 body.put("package", context.getApplicationContext().getPackageName());
             } catch (JSONException e) {
                 promise.reject("unable to Login.");
@@ -216,6 +217,49 @@ public class Auth {
             }
 
             Server.request(context, Request.Method.POST, ApiKey.REQUEST_API_URL + "account/profile-photo/", headers, profile, new Promise<JSONObject>() {
+                        @Override
+                        public void resolving(int progress, String msg) {
+                            promise.resolving(progress, msg);
+                        }
+
+                        @Override
+                        public void resolved(JSONObject data) {
+                            try {
+                                promise.resolved(data.getString("message"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                promise.reject("Something went wrong.");
+                            }
+                        }
+
+                        @Override
+                        public void reject(String err) {
+                            promise.reject(err);
+                        }
+                    }
+            );
+        }
+    }
+
+    public static class Notify {
+        public static void pushNotification(Context context, String to, String title, String body, Promise<String> promise) {
+            Map<String, String> headers = new HashMap<>();
+            headers.put("RAK", ApiKey.REQUEST_API_KEY);
+            headers.put("AT", Auth.AUTH_TOKEN);
+            headers.put("LT", Auth.LOGIN_TOKEN);
+
+            JSONObject notification = new JSONObject();
+            try {
+                notification.put("uid", to);
+                notification.put("title", title);
+                notification.put("body", body);
+            } catch (JSONException e) {
+                promise.reject("unable to Login.");
+                e.printStackTrace();
+                return;
+            }
+
+            Server.request(context, Request.Method.POST, ApiKey.REQUEST_API_URL + "account/push-notification/", headers, notification, new Promise<JSONObject>() {
                         @Override
                         public void resolving(int progress, String msg) {
                             promise.resolving(progress, msg);

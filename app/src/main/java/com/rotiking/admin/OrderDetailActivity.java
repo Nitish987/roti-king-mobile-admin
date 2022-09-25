@@ -17,11 +17,13 @@ import android.widget.Toast;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.rotiking.admin.adapter.CheckoutCartItemRecyclerAdapter;
+import com.rotiking.admin.common.auth.Auth;
 import com.rotiking.admin.models.CartItem;
 import com.rotiking.admin.models.CheckoutCartItem;
 import com.rotiking.admin.models.Order;
 import com.rotiking.admin.models.Topping;
 import com.rotiking.admin.utils.DateParser;
+import com.rotiking.admin.utils.Promise;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +40,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private TextView orderedStateTxt, orderedState, cookingState, dispatchedState, onWayState, deliveredState;
     private LinearLayout deliveryAgentDesk;
 
-    private String orderId;
+    private String orderId, to;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                 Order order = value.toObject(Order.class);
 
                 assert order != null;
+                to = order.getUid();
+
                 CheckoutCartItemRecyclerAdapter adapter = new CheckoutCartItemRecyclerAdapter(createOrderItemList(order.getItems()));
                 orderItemRV.setAdapter(adapter);
 
@@ -205,7 +209,20 @@ public class OrderDetailActivity extends AppCompatActivity {
             } else {
                 Map<String, Object> map = new HashMap<>();
                 map.put("orderState", 1);
-                FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map).addOnSuccessListener(unused -> Toast.makeText(this, "Order Accepted.", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(this, "Unable to accept order.", Toast.LENGTH_SHORT).show());
+                FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map).addOnSuccessListener(unused -> {
+                    Auth.Notify.pushNotification(this, to, "Order Preparing", "We are cooking you food be ready.", new Promise<String>() {
+                        @Override
+                        public void resolving(int progress, String msg) {}
+
+                        @Override
+                        public void resolved(String o) {
+                            Toast.makeText(OrderDetailActivity.this, "Order Accepted.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void reject(String err) {}
+                    });
+                }).addOnFailureListener(e -> Toast.makeText(this, "Unable to accept order.", Toast.LENGTH_SHORT).show());
             }
         });
 
@@ -217,9 +234,20 @@ public class OrderDetailActivity extends AppCompatActivity {
             alert.setPositiveButton("Yes", (dialogInterface, i) -> {
                 Map<String, Object> map = new HashMap<>();
                 map.put("orderSuccess", false);
-                FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map)
-                        .addOnSuccessListener(unused -> Toast.makeText(this, "Order was canceled.", Toast.LENGTH_SHORT).show())
-                        .addOnFailureListener(e -> Toast.makeText(this, "Unable to cancel Order.", Toast.LENGTH_SHORT).show());
+                FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map).addOnSuccessListener(unused -> {
+                    Auth.Notify.pushNotification(this, to, "Order Canceled", "Your order was canceled.", new Promise<String>() {
+                        @Override
+                        public void resolving(int progress, String msg) {}
+
+                        @Override
+                        public void resolved(String o) {
+                            Toast.makeText(OrderDetailActivity.this, "Order was canceled.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void reject(String err) {}
+                    });
+                }).addOnFailureListener(e -> Toast.makeText(this, "Unable to cancel Order.", Toast.LENGTH_SHORT).show());
             });
             alert.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
             alert.show();
