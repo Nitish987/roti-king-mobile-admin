@@ -21,11 +21,9 @@ import java.util.Map;
 
 public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdapter.AgentHolder> {
     private final List<Agent> agents;
-    private boolean isForSelection;
 
-    public AgentRecyclerAdapter(List<Agent> agents, boolean isForSelection) {
+    public AgentRecyclerAdapter(List<Agent> agents) {
         this.agents = agents;
-        this.isForSelection = isForSelection;
     }
 
     @NonNull
@@ -42,16 +40,10 @@ public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdap
         holder.setPhone(agent.getPhone());
 
         holder.itemView.setOnClickListener(view -> {
-            if (isForSelection) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("agentName", agent.getName());
-                map.put("agentPhone", agent.getPhone());
-            } else {
-                Intent intent = new Intent(view.getContext(), CreateDeliveryAgentActivity.class);
-                intent.putExtra("AGENT", agent);
-                intent.putExtra("NEW", false);
-                view.getContext().startActivity(intent);
-            }
+            Intent intent = new Intent(view.getContext(), CreateDeliveryAgentActivity.class);
+            intent.putExtra("AGENT", agent);
+            intent.putExtra("NEW", false);
+            view.getContext().startActivity(intent);
         });
     }
 
@@ -72,7 +64,8 @@ public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdap
         }
 
         public void setPhoto(String photo) {
-            if (!photo.equals("None")) Glide.with(this.photo.getContext()).load(photo).into(this.photo);
+            if (!photo.equals("None"))
+                Glide.with(this.photo.getContext()).load(photo).into(this.photo);
         }
 
         public void setName(String name) {

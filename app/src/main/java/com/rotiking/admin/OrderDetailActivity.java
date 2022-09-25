@@ -111,9 +111,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                 phoneTxt.setText(order.getPhone());
                 orderedStateTxt.setText(getOrderStateTxt(order.getOrderState()));
 
-                if (order.getOrderState() > 1) {
-                    deliveryAgentDesk.setVisibility(View.VISIBLE);
-
+                if (order.getAgentName() != null && order.getAgentPhone() != null) {
                     agentNameTxt.setText(order.getAgentName());
                     agentPhoneTxt.setText(order.getAgentPhone());
                 }
@@ -127,12 +125,18 @@ public class OrderDetailActivity extends AppCompatActivity {
                         orderStateIndicator.setProgressCompat(25, true);
                         orderedState.getBackground().setTint(getColor(R.color.red));
                         cookingState.getBackground().setTint(getColor(R.color.red));
+
+                        acceptOrderBtn.setVisibility(View.GONE);
+                        acceptOrderBtn.setEnabled(false);
                         break;
                     case 2:
                         orderStateIndicator.setProgressCompat(50, true);
                         orderedState.getBackground().setTint(getColor(R.color.red));
                         cookingState.getBackground().setTint(getColor(R.color.red));
                         dispatchedState.getBackground().setTint(getColor(R.color.red));
+
+                        acceptOrderBtn.setVisibility(View.GONE);
+                        acceptOrderBtn.setEnabled(false);
                         break;
                     case 3:
                         orderStateIndicator.setProgressCompat(75, true);
@@ -140,6 +144,12 @@ public class OrderDetailActivity extends AppCompatActivity {
                         cookingState.getBackground().setTint(getColor(R.color.red));
                         dispatchedState.getBackground().setTint(getColor(R.color.red));
                         onWayState.getBackground().setTint(getColor(R.color.red));
+
+                        acceptOrderBtn.setVisibility(View.GONE);
+                        acceptOrderBtn.setEnabled(false);
+
+                        cancelOrderBtn.setVisibility(View.GONE);
+                        cancelOrderBtn.setEnabled(false);
                         break;
                     case 4:
                         orderStateIndicator.setProgressCompat(100, true);
@@ -148,8 +158,11 @@ public class OrderDetailActivity extends AppCompatActivity {
                         dispatchedState.getBackground().setTint(getColor(R.color.red));
                         onWayState.getBackground().setTint(getColor(R.color.red));
                         deliveredState.getBackground().setTint(getColor(R.color.red));
-                        deliveryAgentDesk.setVisibility(View.GONE);
-                        cancelOrderBtn.setVisibility(View.INVISIBLE);
+
+                        acceptOrderBtn.setVisibility(View.GONE);
+                        acceptOrderBtn.setEnabled(false);
+
+                        cancelOrderBtn.setVisibility(View.GONE);
                         cancelOrderBtn.setEnabled(false);
                         break;
                 }
@@ -167,12 +180,22 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         deliveryAgentDesk.setOnClickListener(view -> {
             Intent intent = new Intent(this, SelectDeliveryAgentActivity.class);
-
+            intent.putExtra("ORDER_ID", orderId);
             startActivity(intent);
         });
 
         acceptOrderBtn.setOnClickListener(view -> {
-
+            if (agentNameTxt.getText().toString().equals(getString(R.string.no_name)) || agentPhoneTxt.getText().toString().equals(getString(R.string.no_phone))) {
+                Toast.makeText(this, "No delivery agent selected.", Toast.LENGTH_SHORT).show();
+            } else {
+                Map<String, Object> map = new HashMap<>();
+                map.put("orderState", 1);
+                FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map).addOnSuccessListener(unused -> {
+                    Toast.makeText(this, "Order Accepted.", Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(this, "Unable to accept order.", Toast.LENGTH_SHORT).show();
+                });
+            }
         });
 
         cancelOrderBtn.setOnClickListener(view -> {
@@ -201,7 +224,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             orderName.append(cartItem.getFood_data().getName()).append("(").append(cartItem.getQuantity()).append(")");
             if (!cartItem.getTopping_ids().equals("None")) {
                 orderName.append(" + Toppings(");
-                for (Topping topping: cartItem.getToppings()) {
+                for (Topping topping : cartItem.getToppings()) {
                     orderName.append(topping.getName()).append(", ");
                 }
                 orderName.replace(orderName.length() - 2, orderName.length(), ")");
@@ -214,12 +237,18 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private String getOrderStateTxt(int state) {
         switch (state) {
-            case 0: return  "Ordered...";
-            case 1: return  "Cooking...";
-            case 2: return  "Dispatched...";
-            case 3: return  "On way...";
-            case 4: return  "Delivered...";
-            default: return "";
+            case 0:
+                return "Ordered...";
+            case 1:
+                return "Cooking...";
+            case 2:
+                return "Dispatched...";
+            case 3:
+                return "On way...";
+            case 4:
+                return "Delivered...";
+            default:
+                return "";
         }
     }
 }
