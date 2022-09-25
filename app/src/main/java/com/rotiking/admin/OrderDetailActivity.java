@@ -168,6 +168,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                             orderedStateTxt.setText(notDelivered);
                         }
 
+                        deliveryAgentDesk.setEnabled(false);
+
                         acceptOrderBtn.setVisibility(View.GONE);
                         acceptOrderBtn.setEnabled(false);
 
@@ -203,11 +205,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             } else {
                 Map<String, Object> map = new HashMap<>();
                 map.put("orderState", 1);
-                FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map).addOnSuccessListener(unused -> {
-                    Toast.makeText(this, "Order Accepted.", Toast.LENGTH_SHORT).show();
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(this, "Unable to accept order.", Toast.LENGTH_SHORT).show();
-                });
+                FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map).addOnSuccessListener(unused -> Toast.makeText(this, "Order Accepted.", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(this, "Unable to accept order.", Toast.LENGTH_SHORT).show());
             }
         });
 
