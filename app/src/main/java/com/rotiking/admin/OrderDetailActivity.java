@@ -120,8 +120,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                 orderedStateTxt.setText(getOrderStateTxt(order.getOrderState()));
 
                 if (order.getAgentName() != null && order.getAgentPhone() != null) {
-                    agentNameTxt.setText(order.getAgentName());
-                    agentPhoneTxt.setText(order.getAgentPhone());
+                    agentNameTxt.setText(order.getAgentName().equals("")? getString(R.string.no_name) : order.getAgentName());
+                    agentPhoneTxt.setText(order.getAgentPhone().equals("")? getString(R.string.no_phone) : order.getAgentPhone());
                 }
 
                 switch (order.getOrderState()) {

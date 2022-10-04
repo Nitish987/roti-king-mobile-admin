@@ -7,8 +7,6 @@ import com.google.gson.Gson;
 import com.rotiking.admin.common.auth.Auth;
 import com.rotiking.admin.common.settings.ApiKey;
 import com.rotiking.admin.models.Agent;
-import com.rotiking.admin.models.Food;
-import com.rotiking.admin.models.Topping;
 import com.rotiking.admin.utils.Promise;
 import com.rotiking.admin.utils.Server;
 

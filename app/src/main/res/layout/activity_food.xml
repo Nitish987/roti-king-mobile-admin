@@ -193,6 +193,14 @@
                 android:layout_marginTop="5dp"
                 android:inputType="number"/>
 
+            <TextView
+                android:id="@+id/payable_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/red"
+                android:text="@string/price"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

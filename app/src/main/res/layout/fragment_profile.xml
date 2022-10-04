@@ -95,6 +95,13 @@
             android:text="@string/shop_close"
             android:padding="10dp"/>
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/free_delivery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/paid_delivery"
+            android:padding="10dp"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/logout"
             android:layout_width="match_parent"

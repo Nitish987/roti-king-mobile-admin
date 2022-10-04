@@ -35,7 +35,7 @@ public class ProfileFragment extends Fragment {
     private ImageView myPhoto;
     private TextView myNameTxt, emailTxt, usernameTxt;
     private AppCompatButton logoutBtn, changePhotoBtn;
-    private SwitchMaterial shopOpener;
+    private SwitchMaterial shopOpener, freeDelivery;
 
     private String photo = null;
 
@@ -54,6 +54,7 @@ public class ProfileFragment extends Fragment {
         usernameTxt = view.findViewById(R.id.username);
         changePhotoBtn = view.findViewById(R.id.edit_photo);
         shopOpener = view.findViewById(R.id.shop_opener);
+        freeDelivery = view.findViewById(R.id.free_delivery);
         logoutBtn = view.findViewById(R.id.logout);
 
         return view;
@@ -104,6 +105,15 @@ public class ProfileFragment extends Fragment {
                     o_ = "Shop Open";
                 }
                 shopOpener.setText(o_);
+
+                boolean isDelivery = value.get("deliveryFree", Boolean.class);
+                freeDelivery.setChecked(isDelivery);
+
+                String d_ = "Paid Delivery";
+                if (isDelivery) {
+                    d_ = "Free Delivery";
+                }
+                freeDelivery.setText(d_);
             }
         });
 
@@ -116,7 +126,13 @@ public class ProfileFragment extends Fragment {
         shopOpener.setOnCheckedChangeListener((compoundButton, b) -> {
                 Map<String, Object> map = new HashMap<>();
                 map.put("open", b);
-                FirebaseFirestore.getInstance().collection("shop").document("state").set(map).addOnFailureListener(e -> Toast.makeText(view.getContext(), "Something went wrong.", Toast.LENGTH_SHORT).show());
+                FirebaseFirestore.getInstance().collection("shop").document("state").update(map).addOnFailureListener(e -> Toast.makeText(view.getContext(), "Something went wrong.", Toast.LENGTH_SHORT).show());
+        });
+
+        freeDelivery.setOnCheckedChangeListener((compoundButton, b) -> {
+                Map<String, Object> map = new HashMap<>();
+                map.put("deliveryFree", b);
+                FirebaseFirestore.getInstance().collection("shop").document("state").update(map).addOnFailureListener(e -> Toast.makeText(view.getContext(), "Something went wrong.", Toast.LENGTH_SHORT).show());
         });
 
         logoutBtn.setOnClickListener(view1 -> {

@@ -9,11 +9,14 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -32,6 +35,7 @@ public class FoodActivity extends AppCompatActivity {
     private AppCompatButton save;
     private CircularProgressIndicator saveProgress;
     private ImageButton delete, close;
+    private TextView payablePrice;
 
     private StorageReference reference;
 
@@ -63,6 +67,7 @@ public class FoodActivity extends AppCompatActivity {
         saveProgress = findViewById(R.id.save_progress);
         delete = findViewById(R.id.delete);
         close = findViewById(R.id.close);
+        payablePrice = findViewById(R.id.payable_price);
     }
 
     @Override
@@ -92,6 +97,29 @@ public class FoodActivity extends AppCompatActivity {
 
         String d_ = Integer.toString(food.getDiscount());
         discount.setText(d_);
+
+        String pp_ = "Payable Price : " + "\u20B9 " + getPayablePrice(food.getPrice(), food.getDiscount());
+        payablePrice.setText(pp_);
+
+        discount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!price.getText().toString().equals("") && !discount.getText().toString().equals("")) {
+                    String pp_ = "Payable Price : " + "\u20B9 " + getPayablePrice(Integer.parseInt(price.getText().toString()), Integer.parseInt(discount.getText().toString()));
+                    payablePrice.setText(pp_);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         save.setOnClickListener(view -> {
             if (Validator.isEmpty(foodName.getText().toString())) {
@@ -263,5 +291,12 @@ public class FoodActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private int getPayablePrice(int price, int discount) {
+        if (discount != 0) {
+            price = price - Math.round((float) (discount * price) / 100);
+        }
+        return price;
     }
 }
