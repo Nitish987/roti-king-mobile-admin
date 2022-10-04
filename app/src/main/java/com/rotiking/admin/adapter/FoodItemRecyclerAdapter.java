@@ -9,53 +9,45 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.rotiking.admin.FoodActivity;
 import com.rotiking.admin.R;
 import com.rotiking.admin.models.Food;
 
-import java.util.List;
-
-public class FoodItemRecyclerAdapter extends RecyclerView.Adapter<FoodItemRecyclerAdapter.FoodItemHolder> {
-    private final List<Food> foods;
+public class FoodItemRecyclerAdapter extends FirestoreRecyclerAdapter<Food, FoodItemRecyclerAdapter.FoodItemHolder> {
     private final LinearLayout noFoodsI;
 
-    public FoodItemRecyclerAdapter(List<Food> foods, LinearLayout noFoodsI) {
-        this.foods = foods;
+    public FoodItemRecyclerAdapter(FirestoreRecyclerOptions<Food> options, LinearLayout noFoodsI) {
+        super(options);
         this.noFoodsI = noFoodsI;
     }
 
     @NonNull
     @Override
-    public FoodItemRecyclerAdapter.FoodItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new FoodItemRecyclerAdapter.FoodItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_food, parent, false));
+    public FoodItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new FoodItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_food, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FoodItemRecyclerAdapter.FoodItemHolder holder, int position) {
+    protected void onBindViewHolder(@NonNull FoodItemHolder holder, int position, @NonNull Food model) {
         noFoodsI.setVisibility(View.INVISIBLE);
 
-        Food food = foods.get(position);
-        holder.setPhoto(food.getPhoto());
-        holder.setName(food.getName());
-        holder.setType(food.getFood_type());
-        holder.setPrice(food.getPrice(), food.getDiscount());
-        holder.setRating(food.getRating());
+        holder.setPhoto(model.getPhoto());
+        holder.setName(model.getName());
+        holder.setType(model.getFood_type());
+        holder.setPrice(model.getPrice(), model.getDiscount());
+        holder.setRating(model.getRating());
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), FoodActivity.class);
-            intent.putExtra("FOOD", food);
+            intent.putExtra("FOOD", model);
             intent.putExtra("NEW", false);
             view.getContext().startActivity(intent);
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return foods.size();
     }
 
     public static class FoodItemHolder extends RecyclerView.ViewHolder {

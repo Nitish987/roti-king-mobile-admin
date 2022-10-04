@@ -11,24 +11,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.rotiking.admin.R;
 import com.rotiking.admin.ToppingActivity;
 import com.rotiking.admin.adapter.ToppingItemRecyclerAdapter;
-import com.rotiking.admin.common.db.Database;
 import com.rotiking.admin.models.Topping;
-import com.rotiking.admin.utils.Promise;
-
-import java.util.List;
 
 public class ToppingsFragment extends Fragment {
     private View view;
     private FloatingActionButton addToppingBtn;
     private RecyclerView toppingsRV;
-    private CircularProgressIndicator toppingsProgress;
     private LinearLayout noToppingI;
 
     @Override
@@ -41,7 +37,6 @@ public class ToppingsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_toppings, container, false);
 
         addToppingBtn = view.findViewById(R.id.add_topping_btn);
-        toppingsProgress = view.findViewById(R.id.toppings_progress);
         noToppingI = view.findViewById(R.id.no_topping_i);
 
         toppingsRV = view.findViewById(R.id.toppings_RV);
@@ -55,7 +50,7 @@ public class ToppingsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         addToppingBtn.setOnClickListener(v -> {
-            Topping topping = new Topping("", "", "", "", true, 0,0);
+            Topping topping = new Topping(true, "", "", "", "", 0,0, "");
             Intent intent = new Intent(view.getContext(), ToppingActivity.class);
             intent.putExtra("TOPPING", topping);
             intent.putExtra("NEW", true);
@@ -66,23 +61,10 @@ public class ToppingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Database.getToppingList(view.getContext(), new Promise<List<Topping>>() {
-            @Override
-            public void resolving(int progress, String msg) {
-                toppingsProgress.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void resolved(List<Topping> o) {
-                toppingsProgress.setVisibility(View.INVISIBLE);
-                ToppingItemRecyclerAdapter adapter = new ToppingItemRecyclerAdapter(o, noToppingI);
-                toppingsRV.setAdapter(adapter);
-            }
-
-            @Override
-            public void reject(String err) {
-                Toast.makeText(view.getContext(), err, Toast.LENGTH_SHORT).show();
-            }
-        });
+        Query query = FirebaseFirestore.getInstance().collection("toppings");
+        FirestoreRecyclerOptions<Topping> options = new FirestoreRecyclerOptions.Builder<Topping>().setQuery(query, Topping.class).build();
+        ToppingItemRecyclerAdapter adapter = new ToppingItemRecyclerAdapter(options, noToppingI);
+        toppingsRV.setAdapter(adapter);
+        adapter.startListening();
     }
 }

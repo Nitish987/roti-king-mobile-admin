@@ -12,47 +12,40 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.rotiking.admin.R;
 import com.rotiking.admin.ToppingActivity;
 import com.rotiking.admin.models.Topping;
 
-import java.util.List;
-
-public class ToppingItemRecyclerAdapter extends RecyclerView.Adapter<ToppingItemRecyclerAdapter.ToppingItemHolder> {
-    private final List<Topping> toppings;
+public class ToppingItemRecyclerAdapter extends FirestoreRecyclerAdapter<Topping, ToppingItemRecyclerAdapter.ToppingItemHolder> {
     private final LinearLayout noToppingI;
 
-    public ToppingItemRecyclerAdapter(List<Topping> toppings, LinearLayout noToppingI) {
-        this.toppings = toppings;
+    public ToppingItemRecyclerAdapter(FirestoreRecyclerOptions<Topping> options, LinearLayout noToppingI) {
+        super(options);
         this.noToppingI = noToppingI;
     }
 
     @NonNull
     @Override
-    public ToppingItemRecyclerAdapter.ToppingItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ToppingItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ToppingItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_topping, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ToppingItemRecyclerAdapter.ToppingItemHolder holder, int position) {
+    protected void onBindViewHolder(@NonNull ToppingItemHolder holder, int position, @NonNull Topping model) {
         noToppingI.setVisibility(View.INVISIBLE);
 
-        Topping topping = toppings.get(position);
-        holder.setPhoto(topping.getPhoto());
-        holder.setName(topping.getName());
-        holder.setPrice(topping.getPrice());
+        holder.setPhoto(model.getPhoto());
+        holder.setName(model.getName());
+        holder.setPrice(model.getPrice());
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), ToppingActivity.class);
-            intent.putExtra("TOPPING", topping);
+            intent.putExtra("TOPPING", model);
             intent.putExtra("NEW", false);
             view.getContext().startActivity(intent);
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return toppings.size();
     }
 
     public static class ToppingItemHolder extends RecyclerView.ViewHolder {

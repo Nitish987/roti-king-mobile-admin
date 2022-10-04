@@ -11,24 +11,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.rotiking.admin.FoodActivity;
 import com.rotiking.admin.R;
 import com.rotiking.admin.adapter.FoodItemRecyclerAdapter;
-import com.rotiking.admin.common.db.Database;
 import com.rotiking.admin.models.Food;
-import com.rotiking.admin.utils.Promise;
-
-import java.util.List;
 
 public class FoodsFragment extends Fragment {
     private View view;
     private FloatingActionButton addFoodBtn;
     private RecyclerView foodsRV;
-    private CircularProgressIndicator foodsProgress;
     private LinearLayout noFoodsI;
 
     @Override
@@ -41,7 +37,6 @@ public class FoodsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_foods, container, false);
 
         addFoodBtn = view.findViewById(R.id.add_food_btn);
-        foodsProgress = view.findViewById(R.id.foods_progress);
         noFoodsI = view.findViewById(R.id.no_food_i);
 
         foodsRV = view.findViewById(R.id.foods_RV);
@@ -55,7 +50,7 @@ public class FoodsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         addFoodBtn.setOnClickListener(v -> {
-            Food food = new Food("", "", "", "", "", "", "", true, 0, 0, 0);
+            Food food = new Food(true, "", "", 0, "", "", "", "", "", "", 0, 0.0);
             Intent intent = new Intent(view.getContext(), FoodActivity.class);
             intent.putExtra("FOOD", food);
             intent.putExtra("NEW", true);
@@ -66,23 +61,10 @@ public class FoodsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Database.getFoodList(view.getContext(), new Promise<List<Food>>() {
-            @Override
-            public void resolving(int progress, String msg) {
-                foodsProgress.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void resolved(List<Food> o) {
-                foodsProgress.setVisibility(View.INVISIBLE);
-                FoodItemRecyclerAdapter adapter = new FoodItemRecyclerAdapter(o, noFoodsI);
-                foodsRV.setAdapter(adapter);
-            }
-
-            @Override
-            public void reject(String err) {
-                Toast.makeText(view.getContext(), err, Toast.LENGTH_SHORT).show();
-            }
-        });
+        Query query = FirebaseFirestore.getInstance().collection("foods");
+        FirestoreRecyclerOptions<Food> options = new FirestoreRecyclerOptions.Builder<Food>().setQuery(query, Food.class).build();
+        FoodItemRecyclerAdapter adapter = new FoodItemRecyclerAdapter(options, noFoodsI);
+        foodsRV.setAdapter(adapter);
+        adapter.startListening();
     }
 }
