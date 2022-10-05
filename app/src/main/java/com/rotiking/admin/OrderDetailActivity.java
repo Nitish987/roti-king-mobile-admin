@@ -40,7 +40,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private TextView orderedStateTxt, orderedState, cookingState, dispatchedState, onWayState, deliveredState;
     private LinearLayout deliveryAgentDesk;
 
-    private String orderId, to;
+    private String orderId, to, toAgent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +87,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
                 assert order != null;
                 to = order.getUid();
+                toAgent = order.getAgentUid();
 
                 CheckoutCartItemRecyclerAdapter adapter = new CheckoutCartItemRecyclerAdapter(createOrderItemList(order.getItems()));
                 orderItemRV.setAdapter(adapter);
@@ -215,6 +216,18 @@ public class OrderDetailActivity extends AppCompatActivity {
                 map.put("orderState", 1);
                 FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map).addOnSuccessListener(unused -> {
                     Auth.Notify.pushNotification(this, to, "Order Preparing", "We are cooking you food be ready.", new Promise<String>() {
+                        @Override
+                        public void resolving(int progress, String msg) {}
+
+                        @Override
+                        public void resolved(String o) {
+                            Toast.makeText(OrderDetailActivity.this, "Order Accepted.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void reject(String err) {}
+                    });
+                    Auth.Notify.pushNotification(this, toAgent, "New Order", "You are assigned with a new order.", new Promise<String>() {
                         @Override
                         public void resolving(int progress, String msg) {}
 

@@ -35,7 +35,7 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Query query = FirebaseFirestore.getInstance().collection("help").orderBy("time", Query.Direction.ASCENDING);
+        Query query = FirebaseFirestore.getInstance().collection("help").orderBy("time", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Help> options = new FirestoreRecyclerOptions.Builder<Help>().setQuery(query, Help.class).build();
         HelpRecyclerAdapter adapter = new HelpRecyclerAdapter(options, noHelpI);
         helpRV.setAdapter(adapter);
