@@ -21,12 +21,14 @@
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/drawable/ic_launcher_background.xml" value="0.156" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/drawable/ic_outline_account_circle_24.xml" value="0.156" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/drawable/ic_outline_home_24.xml" value="0.1" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/drawable/ic_outline_live_help_24.xml" value="0.1645" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/drawable/ic_outline_lock_24.xml" value="0.156" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/drawable/ic_outline_search_24.xml" value="0.156" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/drawable/ic_outline_search_red_24.xml" value="0.156" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/drawable/ic_outline_shopping_bag_24.xml" value="0.156" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_create_delivery_agent.xml" value="0.25" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_food.xml" value="0.1875" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_help.xml" value="0.176953125" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_main.xml" value="0.19705882352941176" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_my_photo.xml" value="0.1875" />
@@ -37,15 +39,17 @@
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/activity_topping.xml" value="0.25" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_dispatcher.xml" value="0.1875" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_foods.xml" value="0.1875" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_help.xml" value="0.1875" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_orders.xml" value="0.1875" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_profile.xml" value="0.1875" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/fragment_toppings.xml" value="0.1875" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_agent.xml" value="0.18532818532818532" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_cart_item.xml" value="0.1814814814814815" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_food.xml" value="0.264" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_help.xml" value="0.18532818532818532" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_order.xml" value="0.25" />
         <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/layout/item_topping.xml" value="0.25" />
-        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/menu/main_bottom_navigation.xml" value="0.1" />
+        <entry key="..\:/company_projects/RotiKing/software/mobile/admin/app/src/main/res/menu/main_bottom_navigation.xml" value="0.18532818532818532" />
       </map>
     </option>
   </component>

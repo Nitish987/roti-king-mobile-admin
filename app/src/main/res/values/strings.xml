@@ -87,6 +87,12 @@
     <string name="no_topping_items">No Topping Items</string>
     <string name="no_delivery_agent">No Delivery Agent.</string>
     <string name="paid_delivery">Paid Delivery</string>
+    <string name="message">Message</string>
+    <string name="subject">Subject</string>
+    <string name="help_support"><![CDATA[Help & Support]]></string>
+    <string name="no_customer_query">No Customer Query.</string>
+    <string name="customer_query">Customer Query</string>
+    <string name="click_to_reply">Click to Reply</string>
     <string-array name="food_type_entries">
         <item>breakfast</item>
         <item>lunch</item>

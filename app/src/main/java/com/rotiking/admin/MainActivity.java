@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rotiking.admin.common.auth.Auth;
@@ -16,6 +17,7 @@ import com.rotiking.admin.tabs.ToppingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView tabs;
+    private ImageButton customerQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         tabs = findViewById(R.id.tabs);
+        customerQuery = findViewById(R.id.help_customer);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -58,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
             return true;
+        });
+
+        customerQuery.setOnClickListener(view -> {
+            Intent intent = new Intent(this, HelpActivity.class);
+            startActivity(intent);
         });
     }
 
