@@ -131,6 +131,7 @@ public class CreateDeliveryAgentActivity extends AppCompatActivity {
                 @Override
                 public void reject(String err) {
                     Toast.makeText(CreateDeliveryAgentActivity.this, err, Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }));
             alert.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
