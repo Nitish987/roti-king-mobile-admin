@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.rotiking.admin.R;
 import com.rotiking.admin.models.Agent;
@@ -18,15 +20,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SelectAgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdapter.AgentHolder> {
+public class SelectAgentRecyclerAdapter extends FirestoreRecyclerAdapter<Agent, AgentRecyclerAdapter.AgentHolder> {
     private final Activity activity;
-    private final List<Agent> agents;
     private final  String orderId;
     private final LinearLayout noDeliveryAgentI;
 
-    public SelectAgentRecyclerAdapter(Activity activity, List<Agent> agents, String orderId, LinearLayout noDeliveryAgentI) {
+    public SelectAgentRecyclerAdapter(FirestoreRecyclerOptions<Agent> options, Activity activity, String orderId, LinearLayout noDeliveryAgentI) {
+        super(options);
         this.activity = activity;
-        this.agents = agents;
         this.orderId = orderId;
         this.noDeliveryAgentI = noDeliveryAgentI;
     }
@@ -38,25 +39,19 @@ public class SelectAgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecycl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AgentRecyclerAdapter.AgentHolder holder, int position) {
+    protected void onBindViewHolder(@NonNull AgentRecyclerAdapter.AgentHolder holder, int position, @NonNull Agent model) {
         noDeliveryAgentI.setVisibility(View.INVISIBLE);
 
-        Agent agent = agents.get(position);
-        holder.setPhoto(agent.getPhoto());
-        holder.setName(agent.getName());
-        holder.setPhone(agent.getPhone());
+        holder.setPhoto(model.getPhoto());
+        holder.setName(model.getName());
+        holder.setPhone(model.getPhone());
 
         holder.itemView.setOnClickListener(view -> {
             Map<String, Object> map = new HashMap<>();
-            map.put("agentName", agent.getName());
-            map.put("agentPhone", "+91" + agent.getPhone());
-            map.put("agentUid", agent.getUid());
+            map.put("agentName", model.getName());
+            map.put("agentPhone", "+91" + model.getPhone());
+            map.put("agentUid", model.getUid());
             FirebaseFirestore.getInstance().collection("orders").document(orderId).update(map).addOnSuccessListener(unused -> activity.finish()).addOnFailureListener(e -> Toast.makeText(view.getContext(), "Unable to allot delivery agent.", Toast.LENGTH_SHORT).show());
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return agents.size();
     }
 }

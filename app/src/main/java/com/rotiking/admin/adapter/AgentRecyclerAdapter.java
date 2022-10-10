@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.rotiking.admin.CreateDeliveryAgentActivity;
 import com.rotiking.admin.R;
 import com.rotiking.admin.models.Agent;
@@ -20,12 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdapter.AgentHolder> {
-    private final List<Agent> agents;
+public class AgentRecyclerAdapter extends FirestoreRecyclerAdapter<Agent, AgentRecyclerAdapter.AgentHolder> {
     private final LinearLayout noDeliveryAgentI;
 
-    public AgentRecyclerAdapter(List<Agent> agents, LinearLayout noDeliveryAgentI) {
-        this.agents = agents;
+    public AgentRecyclerAdapter(FirestoreRecyclerOptions<Agent> options, LinearLayout noDeliveryAgentI) {
+        super(options);
         this.noDeliveryAgentI = noDeliveryAgentI;
     }
 
@@ -36,25 +37,19 @@ public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AgentHolder holder, int position) {
+    protected void onBindViewHolder(@NonNull AgentHolder holder, int position, @NonNull Agent model) {
         noDeliveryAgentI.setVisibility(View.INVISIBLE);
 
-        Agent agent = agents.get(position);
-        holder.setPhoto(agent.getPhoto());
-        holder.setName(agent.getName());
-        holder.setPhone(agent.getPhone());
+        holder.setPhoto(model.getPhoto());
+        holder.setName(model.getName());
+        holder.setPhone(model.getPhone());
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), CreateDeliveryAgentActivity.class);
-            intent.putExtra("AGENT", agent);
+            intent.putExtra("AGENT", model);
             intent.putExtra("NEW", false);
             view.getContext().startActivity(intent);
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return agents.size();
     }
 
     public static class AgentHolder extends RecyclerView.ViewHolder {
@@ -69,7 +64,7 @@ public class AgentRecyclerAdapter extends RecyclerView.Adapter<AgentRecyclerAdap
         }
 
         public void setPhoto(String photo) {
-            if (!photo.equals("None"))
+            if (!photo.equals(""))
                 Glide.with(this.photo.getContext()).load(photo).into(this.photo);
         }
 

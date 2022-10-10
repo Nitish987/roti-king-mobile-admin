@@ -29,11 +29,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
     private View view;
     private ImageView myPhoto;
-    private TextView myNameTxt, emailTxt, usernameTxt;
+    private TextView myNameTxt, emailTxt;
     private AppCompatButton logoutBtn, changePhotoBtn;
     private SwitchMaterial shopOpener, freeDelivery;
 
@@ -51,7 +52,6 @@ public class ProfileFragment extends Fragment {
         myPhoto = view.findViewById(R.id.photo);
         myNameTxt = view.findViewById(R.id.my_name);
         emailTxt = view.findViewById(R.id.email);
-        usernameTxt = view.findViewById(R.id.username);
         changePhotoBtn = view.findViewById(R.id.edit_photo);
         shopOpener = view.findViewById(R.id.shop_opener);
         freeDelivery = view.findViewById(R.id.free_delivery);
@@ -63,35 +63,13 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Auth.Account.profile(view.getContext(), new Promise<JSONObject>() {
-            @Override
-            public void resolving(int progress, String msg) {}
+        myNameTxt.setText(Auth.getAuthUserName());
+        emailTxt.setText(Auth.getAuthUserEmail());
 
-            @Override
-            public void resolved(JSONObject data) {
-                try {
-                    JSONObject profile = data.getJSONObject("profile");
-                    String name = profile.getString("name");
-                    String email = profile.getString("email");
-                    String username = profile.getString("username");
-
-                    myNameTxt.setText(name);
-                    emailTxt.setText(email);
-                    usernameTxt.setText(username);
-
-                    photo = profile.getString("photo");
-                    if (!photo.equals("None")) {
-                        Glide.with(view.getContext()).load(photo).into(myPhoto);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void reject(String err) {
-                Toast.makeText(view.getContext(), err, Toast.LENGTH_SHORT).show();
+        FirebaseFirestore.getInstance().collection("user").document(Objects.requireNonNull(Auth.getAuthUserUid())).collection("data").document("profile").get().addOnSuccessListener(documentSnapshot -> {
+            if (!documentSnapshot.get("photo", String.class).equals("")) {
+                photo = documentSnapshot.get("photo", String.class);
+                Glide.with(view.getContext()).load(photo).into(myPhoto);
             }
         });
 

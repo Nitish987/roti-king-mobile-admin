@@ -11,15 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.rotiking.admin.common.auth.Auth;
 import com.rotiking.admin.common.auth.AuthPreferences;
+import com.rotiking.admin.common.db.Database;
 import com.rotiking.admin.common.security.AES128;
 import com.rotiking.admin.utils.Promise;
 import com.rotiking.admin.utils.Validator;
 
-import org.json.JSONObject;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
@@ -70,58 +69,42 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             loginBtn.setVisibility(View.INVISIBLE);
+            loginProgress.setVisibility(View.VISIBLE);
 
-            FirebaseMessaging.getInstance().getToken().addOnSuccessListener(msgToken -> {
-                Auth.Login.login(this, email, password, msgToken, new Promise<JSONObject>() {
-                    @Override
-                    public void resolving(int progress, String msg) {
-                        loginProgress.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void resolved(JSONObject data) {
-                        try {
-                            String message = data.getString("message");
-                            String fToken = data.getString("fToken");
-                            String token = data.getString("token");
-                            String login = data.getString("login");
-                            String encKey = data.getString("encKey");
-
-                            encKey = AES128.decrypt(AES128.NATIVE_ENCRYPTION_KEY, encKey);
-
-                            String finalEncKey = encKey;
-                            FirebaseAuth.getInstance().signInWithCustomToken(fToken).addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    AuthPreferences authPreferences = new AuthPreferences(LoginActivity.this);
-                                    authPreferences.setAuthToken(token, login);
-                                    authPreferences.setEncryptionKey(finalEncKey);
-
-                                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
-
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "Unable to Login.", Toast.LENGTH_LONG).show();
+            Auth.getInstance().signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+                loginProgress.setVisibility(View.VISIBLE);
+                Database.getInstance().collection("user").document(Objects.requireNonNull(authResult.getUser()).getUid())
+                        .collection("data").document("profile").get().addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                if (!documentSnapshot.get("accType", String.class).equals("ADMIN")) {
+                                    Toast.makeText(LoginActivity.this, "You have no Permission to login to this app.", Toast.LENGTH_SHORT).show();
+                                    Auth.getInstance().signOut();
                                     loginBtn.setVisibility(View.VISIBLE);
+                                    loginProgress.setVisibility(View.INVISIBLE);
+                                    return;
                                 }
-                            });
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(LoginActivity.this, "something went wrong.", Toast.LENGTH_SHORT).show();
-                            loginBtn.setVisibility(View.VISIBLE);
-                        }
-                    }
 
-                    @Override
-                    public void reject(String err) {
-                        Toast.makeText(LoginActivity.this, err, Toast.LENGTH_SHORT).show();
-                        loginBtn.setVisibility(View.VISIBLE);
-                    }
-                });
+                                String authToken = documentSnapshot.get("authToken", String.class);
+                                String encKey = AES128.decrypt(AES128.NATIVE_ENCRYPTION_KEY, documentSnapshot.get("encKey", String.class));
+
+                                AuthPreferences preferences = new AuthPreferences(this);
+                                preferences.setAuthToken(authToken);
+                                preferences.setEncryptionKey(encKey);
+
+                                loginProgress.setVisibility(View.GONE);
+
+                                Intent intent = new Intent(this, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Something went wrong.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }).addOnFailureListener(e -> {
-                Toast.makeText(LoginActivity.this, "Unable to Login.", Toast.LENGTH_SHORT).show();
+                loginBtn.setVisibility(View.VISIBLE);
+                loginProgress.setVisibility(View.INVISIBLE);
+                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             });
         });
 
@@ -129,5 +112,25 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RecoverPasswordActivity.class);
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (Auth.isUserAuthenticated(this)) {
+            Auth.getMessaging().getToken().addOnSuccessListener(s -> Auth.Login.updateMessageToken(this, s, new Promise<String>() {
+                @Override
+                public void resolving(int progress, String msg) {
+                }
+
+                @Override
+                public void resolved(String o) {
+                }
+
+                @Override
+                public void reject(String err) {
+                }
+            }));
+        }
     }
 }

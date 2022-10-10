@@ -3,6 +3,7 @@ package com.rotiking.admin.common.db;
 import android.content.Context;
 
 import com.android.volley.Request;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.rotiking.admin.common.auth.Auth;
 import com.rotiking.admin.common.settings.ApiKey;
@@ -19,12 +20,16 @@ import java.util.List;
 import java.util.Map;
 
 public class Database {
+    public static FirebaseFirestore getInstance() {
+        return FirebaseFirestore.getInstance();
+    }
+
     public static class OthersAuth {
         public static void createDeliveryAgent(Context context, String name, String phone, String email, Promise<String> promise) {
             Map<String, String> headers = new HashMap<>();
             headers.put("RAK", ApiKey.REQUEST_API_KEY);
             headers.put("AT", Auth.AUTH_TOKEN);
-            headers.put("LT", Auth.LOGIN_TOKEN);
+            headers.put("UID", Auth.getAuthUserUid());
 
             JSONObject agent = new JSONObject();
             try {
@@ -60,43 +65,11 @@ public class Database {
             );
         }
 
-        public static void getDeliveryAgentList(Context context, Promise<List<Agent>> promise) {
-            Map<String, String> headers = new HashMap<>();
-            headers.put("RAK", ApiKey.REQUEST_API_KEY);
-            headers.put("AT", Auth.AUTH_TOKEN);
-            headers.put("LT", Auth.LOGIN_TOKEN);
-
-            Server.request(context, Request.Method.GET, ApiKey.REQUEST_API_URL + "admin/list-delivery-agent/", headers, null, new Promise<JSONObject>() {
-                        @Override
-                        public void resolving(int progress, String msg) {
-                            promise.resolving(progress, msg);
-                        }
-
-                        @Override
-                        public void resolved(JSONObject data) {
-                            Gson gson = new Gson();
-                            try {
-                                Agent[] agents = gson.fromJson(data.getJSONArray("agents").toString(), Agent[].class);
-                                promise.resolved(Arrays.asList(agents));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                promise.reject("Something went wrong.");
-                            }
-                        }
-
-                        @Override
-                        public void reject(String err) {
-                            promise.reject(err);
-                        }
-                    }
-            );
-        }
-
         public static void deleteDeliveryAgent(Context context, String uid, Promise<String> promise) {
             Map<String, String> headers = new HashMap<>();
             headers.put("RAK", ApiKey.REQUEST_API_KEY);
             headers.put("AT", Auth.AUTH_TOKEN);
-            headers.put("LT", Auth.LOGIN_TOKEN);
+            headers.put("UID", Auth.getAuthUserUid());
 
             Server.request(context, Request.Method.DELETE, ApiKey.REQUEST_API_URL + "admin/delete-delivery-agent/"  + uid + "/", headers, null, new Promise<JSONObject>() {
                         @Override
@@ -127,7 +100,7 @@ public class Database {
         Map<String, String> headers = new HashMap<>();
         headers.put("RAK", ApiKey.REQUEST_API_KEY);
         headers.put("AT", Auth.AUTH_TOKEN);
-        headers.put("LT", Auth.LOGIN_TOKEN);
+        headers.put("UID", Auth.getAuthUserUid());
 
         JSONObject food = new JSONObject();
         try {
@@ -173,7 +146,7 @@ public class Database {
         Map<String, String> headers = new HashMap<>();
         headers.put("RAK", ApiKey.REQUEST_API_KEY);
         headers.put("AT", Auth.AUTH_TOKEN);
-        headers.put("LT", Auth.LOGIN_TOKEN);
+        headers.put("UID", Auth.getAuthUserUid());
 
         JSONObject food = new JSONObject();
         try {
@@ -219,7 +192,7 @@ public class Database {
         Map<String, String> headers = new HashMap<>();
         headers.put("RAK", ApiKey.REQUEST_API_KEY);
         headers.put("AT", Auth.AUTH_TOKEN);
-        headers.put("LT", Auth.LOGIN_TOKEN);
+        headers.put("UID", Auth.getAuthUserUid());
 
         Server.request(context, Request.Method.DELETE, ApiKey.REQUEST_API_URL + "admin/delete-food/"  + foodId + "/", headers, null, new Promise<JSONObject>() {
                     @Override
@@ -249,7 +222,7 @@ public class Database {
         Map<String, String> headers = new HashMap<>();
         headers.put("RAK", ApiKey.REQUEST_API_KEY);
         headers.put("AT", Auth.AUTH_TOKEN);
-        headers.put("LT", Auth.LOGIN_TOKEN);
+        headers.put("UID", Auth.getAuthUserUid());
 
         JSONObject topping = new JSONObject();
         try {
@@ -291,7 +264,7 @@ public class Database {
         Map<String, String> headers = new HashMap<>();
         headers.put("RAK", ApiKey.REQUEST_API_KEY);
         headers.put("AT", Auth.AUTH_TOKEN);
-        headers.put("LT", Auth.LOGIN_TOKEN);
+        headers.put("UID", Auth.getAuthUserUid());
 
         JSONObject topping = new JSONObject();
         try {
@@ -333,7 +306,7 @@ public class Database {
         Map<String, String> headers = new HashMap<>();
         headers.put("RAK", ApiKey.REQUEST_API_KEY);
         headers.put("AT", Auth.AUTH_TOKEN);
-        headers.put("LT", Auth.LOGIN_TOKEN);
+        headers.put("UID", Auth.getAuthUserUid());
 
         Server.request(context, Request.Method.DELETE, ApiKey.REQUEST_API_URL + "admin/delete-topping/"  + toppingId + "/", headers, null, new Promise<JSONObject>() {
                     @Override

@@ -10,7 +10,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.firebase.firestore.Query;
 import com.rotiking.admin.adapter.SelectAgentRecyclerAdapter;
 import com.rotiking.admin.common.db.Database;
 import com.rotiking.admin.models.Agent;
@@ -20,7 +22,6 @@ import java.util.List;
 
 public class SelectDeliveryAgentActivity extends AppCompatActivity {
     private RecyclerView agentsRV;
-    private CircularProgressIndicator agentsProgress;
     private ImageButton close;
     private LinearLayout noDeliveryAgentI;
 
@@ -29,7 +30,6 @@ public class SelectDeliveryAgentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_delivery_agent);
 
-        agentsProgress = findViewById(R.id.delivery_user_progress);
         close = findViewById(R.id.close);
         noDeliveryAgentI = findViewById(R.id.no_delivery_i);
 
@@ -41,24 +41,11 @@ public class SelectDeliveryAgentActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Database.OthersAuth.getDeliveryAgentList(this, new Promise<List<Agent>>() {
-            @Override
-            public void resolving(int progress, String msg) {
-                agentsProgress.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void resolved(List<Agent> o) {
-                agentsProgress.setVisibility(View.INVISIBLE);
-                SelectAgentRecyclerAdapter adapter = new SelectAgentRecyclerAdapter(SelectDeliveryAgentActivity.this, o, getIntent().getStringExtra("ORDER_ID"), noDeliveryAgentI);
-                agentsRV.setAdapter(adapter);
-            }
-
-            @Override
-            public void reject(String err) {
-                Toast.makeText(SelectDeliveryAgentActivity.this, err, Toast.LENGTH_SHORT).show();
-            }
-        });
+        Query query = Database.getInstance().collection("delivery_user");
+        FirestoreRecyclerOptions<Agent> options = new FirestoreRecyclerOptions.Builder<Agent>().setQuery(query, Agent.class).build();
+        SelectAgentRecyclerAdapter adapter = new SelectAgentRecyclerAdapter(options, SelectDeliveryAgentActivity.this, getIntent().getStringExtra("ORDER_ID"), noDeliveryAgentI);
+        agentsRV.setAdapter(adapter);
+        adapter.startListening();
 
         close.setOnClickListener(view -> finish());
     }

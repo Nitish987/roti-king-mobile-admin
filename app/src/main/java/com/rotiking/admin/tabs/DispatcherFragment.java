@@ -13,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.firebase.firestore.Query;
 import com.rotiking.admin.CreateDeliveryAgentActivity;
 import com.rotiking.admin.R;
 import com.rotiking.admin.adapter.AgentRecyclerAdapter;
@@ -28,7 +30,6 @@ public class DispatcherFragment extends Fragment {
     private View view;
     private FloatingActionButton createDeliveryAgent;
     private RecyclerView agentsRV;
-    private CircularProgressIndicator agentsProgress;
     private LinearLayout noDeliveryAgentI;
 
     @Override
@@ -41,7 +42,6 @@ public class DispatcherFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_dispatcher, container, false);
 
         createDeliveryAgent = view.findViewById(R.id.add_delivery_user_btn);
-        agentsProgress = view.findViewById(R.id.delivery_user_progress);
         noDeliveryAgentI = view.findViewById(R.id.no_delivery_i);
 
         agentsRV = view.findViewById(R.id.delivery_user_RV);
@@ -67,23 +67,10 @@ public class DispatcherFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Database.OthersAuth.getDeliveryAgentList(view.getContext(), new Promise<List<Agent>>() {
-            @Override
-            public void resolving(int progress, String msg) {
-                agentsProgress.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void resolved(List<Agent> o) {
-                agentsProgress.setVisibility(View.INVISIBLE);
-                AgentRecyclerAdapter adapter = new AgentRecyclerAdapter(o, noDeliveryAgentI);
-                agentsRV.setAdapter(adapter);
-            }
-
-            @Override
-            public void reject(String err) {
-                Toast.makeText(view.getContext(), err, Toast.LENGTH_SHORT).show();
-            }
-        });
+        Query query = Database.getInstance().collection("delivery_user");
+        FirestoreRecyclerOptions<Agent> options = new FirestoreRecyclerOptions.Builder<Agent>().setQuery(query, Agent.class).build();
+        AgentRecyclerAdapter adapter = new AgentRecyclerAdapter(options, noDeliveryAgentI);
+        agentsRV.setAdapter(adapter);
+        adapter.startListening();
     }
 }
