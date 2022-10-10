@@ -93,6 +93,7 @@
     <string name="no_customer_query">No Customer Query.</string>
     <string name="customer_query">Customer Query</string>
     <string name="click_to_reply">Click to Reply</string>
+    <string name="resent_otp">Resent OTP</string>
     <string-array name="food_type_entries">
         <item>breakfast</item>
         <item>lunch</item>
