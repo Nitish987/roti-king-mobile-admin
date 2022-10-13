@@ -36,12 +36,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Auth.setAuthStateListener(firebaseAuth -> {
-            if (!Auth.isUserAuthenticated(this)) {
-                toLoginActivity();
-            }
-        });
-
         tabs.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.orders:
