@@ -108,6 +108,7 @@ public class CreateDeliveryAgentActivity extends AppCompatActivity {
                             public void reject(String err) {
                                 save.setVisibility(View.VISIBLE);
                                 Toast.makeText(CreateDeliveryAgentActivity.this, err, Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         }
                 );
